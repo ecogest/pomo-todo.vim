@@ -1,3 +1,10 @@
+" Guard {{{1
+"
+if exists("g:pomo_todo_loaded")
+  finish
+endif
+let g:pomo_todo_loaded = 1
+
 " Goal {{{1
 " Structure:
 " ~/.trackdir
@@ -31,11 +38,41 @@
 
 " Ideally the file would appear in a floating window (but pain in the a..)
 
+" Global variables {{{1
+"
+if !exists("g:track_dir")
+  let g:track_dir=$HOME.'/.trackdir'
+endif
+if !exists("g:pomo_file_name")
+  let g:pomo_file_name='daily.pomo'
+endif
+if !exists("g:pomo_todo_file")
+  let g:pomo_todo_file=g:track_dir.'/todo.pomo'
+endif
+if !exists("g:pomo_symbol")
+  let g:pomo_symbol=''
+endif
+if !exists("g:pomo_todo_symbol")
+  let g:pomo_todo_symbol='' "   
+endif
+if !exists("g:pomo_brief_symbol")
+  let g:pomo_brief_symbol=''
+endif
+if !exists("g:pomo_done_symbol")
+  let g:pomo_done_symbol=''
+endif
+if !exists("g:pomo_empty_symbol")
+  let g:pomo_empty_symbol=''
+endif
+
 " Autocommands {{{1
 " Set filetype
-au BufNewFile,BufFilePre,BufRead *.pomo setf pomo
-" Replace Done symbols and save daily todolist to file on write
-au BufWrite *.pomo PomoReplaceDone | PomoSaveTodo
+augroup Pomo_Todo
+  au!
+  au BufNewFile,BufFilePre,BufRead *.pomo setf pomo
+  " Replace Done symbols and save daily todolist to file on write
+  au BufWrite *.pomo PomoReplaceDone | PomoSaveTodo
+augroup END
 
 " Commands {{{1
 " Main command:
